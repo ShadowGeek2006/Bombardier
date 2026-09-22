@@ -10,12 +10,17 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Uses GitHub's marketplace action to install the real binary safely
-      - name: Install Bombardier Binary
-        uses: engineerd/config-tool-action@v0.1.1
-        with:
-          tool: bombardier
-          version: 'v1.2.6'
+      # Installs the official Go environment straight from the Ubuntu repositories
+      - name: Install Go Compiler
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y golang-go
+
+      # Compiles the absolute latest binary directly from the official Bombardier repo
+      - name: Compile Bombardier Statically
+        run: |
+          go install github.com/codesenberg/bombardier@latest
+          sudo cp $(go env GOPATH)/bin/bombardier /usr/local/bin/
 
       - name: Test Baseline Load (100 Connections)
         run: |
