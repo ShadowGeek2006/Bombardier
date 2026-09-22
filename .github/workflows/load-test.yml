@@ -15,7 +15,7 @@ jobs:
       - name: Install Bombardier
         run: |
           # Ensuring the proper Go installation syntax without external prefixes
-          go install //github.com
+          go install https://github.com
           sudo cp $(go env GOPATH)/bin/bombardier /usr/local/bin/
 
       - name: Test Baseline Load (100 Connections)
