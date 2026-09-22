@@ -7,16 +7,15 @@ jobs:
   bombardier-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: 'stable'
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Install Bombardier
-        run: |
-          # Ensuring the proper Go installation syntax without external prefixes
-          go install https://github.com
-          sudo cp $(go env GOPATH)/bin/bombardier /usr/local/bin/
+      # Uses GitHub's marketplace action to install the real binary safely
+      - name: Install Bombardier Binary
+        uses: engineerd/config-tool-action@v0.1.1
+        with:
+          tool: bombardier
+          version: 'v1.2.6'
 
       - name: Test Baseline Load (100 Connections)
         run: |
