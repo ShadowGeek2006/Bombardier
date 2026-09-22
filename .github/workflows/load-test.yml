@@ -7,11 +7,15 @@ jobs:
   bombardier-test:
     runs-on: ubuntu-latest
     steps:
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+
       - name: Install Bombardier
         run: |
-          curl -L -o bombardier https://github.com
-          chmod +x bombardier
-          sudo mv bombardier /usr/local/bin/
+          go install ://github.com
+          sudo cp $(go env GOPATH)/bin/bombardier /usr/local/bin/
 
       - name: Test Baseline Load (100 Connections)
         run: |
