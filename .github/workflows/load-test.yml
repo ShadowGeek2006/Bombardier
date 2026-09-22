@@ -1,29 +1,30 @@
-name: High Concurrency Load Test
+name: Threshold Discovery Load Test
 
 on:
-  workflow_dispatch: # Allows you to manually trigger the test from the GitHub UI
+  workflow_dispatch:
 
 jobs:
   bombardier-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
       - name: Install Bombardier
         run: |
-          # Download the latest Linux AMD64 binary directly from the official repository
-          curl -L -o bombardier https://github.com/codesenberg/bombardier/releases/latest/download/bombardier-linux-amd64
+          curl -L -o bombardier https://github.com
           chmod +x bombardier
           sudo mv bombardier /usr/local/bin/
 
-      - name: Run 5000 Connection Load Test
+      - name: Test Baseline Load (100 Connections)
         run: |
-          # CRITICAL: Increase file descriptor limits so 5,000 connections don't get blocked
           ulimit -n 65535
-          
-          # Run Bombardier:
-          # -c 5000 : 5000 concurrent connections
-          # -d 30s  : test duration of 30 seconds
-          # TODO: Change the URL below to your actual target server
-          bombardier -c 5000 -d 60s https://entropy-khaki.vercel.app
+          echo "Testing normal high traffic..."
+          bombardier -c 100 -d 15s https://thepravah.co.in
+
+      - name: Test Elevated Load (500 Connections)
+        run: |
+          echo "Testing peak event traffic..."
+          bombardier -c 500 -d 15s https://thepravah.co.in
+
+      - name: Test Extreme Load (1000 Connections)
+        run: |
+          echo "Testing the edge of the rate limiter..."
+          bombardier -c 1000 -d 15s https://thepravah.co.in
