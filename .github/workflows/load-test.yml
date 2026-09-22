@@ -26,4 +26,4 @@ jobs:
           # -c 5000 : 5000 concurrent connections
           # -d 30s  : test duration of 30 seconds
           # TODO: Change the URL below to your actual target server
-          bombardier -c 5000 -d 30s https://your-target-api.com
+          bombardier -c 5000 -d 30s https://www.thepravah.co.in
